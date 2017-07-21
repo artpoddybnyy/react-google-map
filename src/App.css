@@ -1,0 +1,134 @@
+.App {
+    text-align: center;
+}
+
+.App-logo {
+    animation: App-logo-spin infinite 5s linear;
+    height: 150px;
+}
+
+.App-header {
+
+    height: 150px;
+    padding: 20px;
+    color: red;
+}
+
+.App-intro {
+    font-size: large;
+}
+
+.hello-world-center {
+    display: flex;
+    justify-content: center;
+
+}
+
+.hello-world {
+    font-size: medium;
+    background-color: #000066;
+    color: #77FFFF;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+
+}
+
+body {
+    background-image: url("react.png");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.btn {
+
+    background-color: #af1420;
+    border: solid;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 15px;
+    cursor: pointer;
+
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+h1{text-align: center}
+.nav-bar{
+    display: flex;
+    justify-content: flex-end;
+}
+.nav-bar-item :link{
+    font-size: large;
+    display: flex;
+    margin:30px;
+    background-color: #eff42f;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+.post-header{
+    display: flex;
+    justify-content: center;
+
+}
+
+.container-post {
+    font-size: large;
+    display: flex;
+    margin-left: 30px;
+    margin-right: 15px;
+}
+
+.item-post {
+    display: flex;
+    flex: 0 1 30px;
+    margin: 10px;
+    padding: 10px;
+    text-align: left;
+}
+
+.title {
+    display: flex;
+    flex: 0 1 400px;
+
+}
+
+.body {
+    display: flex;
+    flex: 0 1 800px;
+}
+
+.checkbox {
+    display: flex;
+    flex: 0 1 30px;
+    vertical-align: top;
+    height: 40px;
+}
+/* Это для всех браузеров, кроме совсем старых, которые не поддерживают
+селекторы с плюсом. Показываем, что label кликабелен. */
+.checkbox + label {
+    cursor: pointer;
+}
+.checkbox:checked + label:before {
+    background: #9FD468;
+}
+/* Сдвигаем переключатель чекбокса, когда он включен. */
+.checkbox:checked + label:after {
+    left: 26px;
+}
