@@ -6,12 +6,9 @@ import PropTypes from 'prop-types';
 export default class PostsComponent extends Component {
 
     render() {
-        let postItems;
-        if(this.props.posts){
-            postItems = this.props.posts.map(post => {
-                return (<PostItem key={post.id} post={post} />);
-            });
-        }
+        let postItems = this.props.posts.map(post =>
+            <PostItem key={post.id} post={post} del={this.props.del} open={this.props.open} />);
+
         return (
             <div>
                 <div className="post-header">
@@ -24,5 +21,5 @@ export default class PostsComponent extends Component {
 }
 
 PostsComponent.propTypes = {
-    posts: PropTypes.array
+   posts: PropTypes.array
 };

@@ -1,21 +1,8 @@
-.App {
-    text-align: center;
-}
 
-.App-logo {
-    animation: App-logo-spin infinite 5s linear;
-    height: 150px;
-}
-
-.App-header {
-
-    height: 150px;
-    padding: 20px;
-    color: red;
-}
-
-.App-intro {
-    font-size: large;
+.main-comp {
+    border: 11px;
+    border-color: #eff42f;
+    border-radius: 2px;
 }
 
 .hello-world-center {
@@ -42,30 +29,8 @@ body {
     background-size: cover;
 }
 
-.btn {
-
-    background-color: #af1420;
-    border: solid;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 15px;
-    cursor: pointer;
-
-}
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
 h1{text-align: center}
+
 .nav-bar{
     display: flex;
     justify-content: flex-end;
@@ -131,4 +96,59 @@ h1{text-align: center}
 /* Сдвигаем переключатель чекбокса, когда он включен. */
 .checkbox:checked + label:after {
     left: 26px;
+}
+.btn {
+    display: flex;
+
+    width: 120px;
+    height: 60px;
+    background-color: #A9A9A9;
+    color: black;
+    padding: 14px 20px;
+    margin: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.8;
+    font-size: larger;
+}
+
+.btn:hover {
+    background-color: #a02c22;
+}
+
+.post-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    background: #FAFAFA;
+    padding: 30px;
+    margin: 50px auto;
+    box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.35);
+    border-radius: 10px;
+    border: 6px solid #305A72;
+    opacity: 0.9;
+}
+
+.in{
+    display: flex;
+    width: auto;
+    padding: 12px 20px;
+    margin: 8px 10px;
+    background: #A9A9A9;
+    color: black;
+    opacity: 0.8;
+    font-size: larger;
+}
+.t-area{
+    height: 100px;
+}
+
+.modal-window{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: lavender;
+    width: 700px;
 }
