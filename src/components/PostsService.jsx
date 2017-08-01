@@ -11,7 +11,7 @@ export default class PostsService extends Component {
         this.state = {
             id: null,
             posts: [],
-            onePost:{
+            onePost: {
                 title: null,
                 body: null
             },
@@ -24,33 +24,25 @@ export default class PostsService extends Component {
             url: 'https://jsonplaceholder.typicode.com/posts',
             dataType: 'json',
             cache: false,
-            success: function (data) {
-                this.setState({posts: data.splice(0, 5)});
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.log(err);
-            }
+            success:  (data) => this.setState({posts: data.splice(0, 5)}),
+            error:  (xhr, status, err) => console.log(err)
         });
     }
 
 
     addPost(event) {
         this.setState({
-            onePost: {
-                title: this.refs.title.value,
-                body: this.refs.body.value
-            }
-        }, function () {
-            $.post({
-                url: 'https://jsonplaceholder.typicode.com/posts',
-                dataType: 'json',
-                data: this.state.onePost
-            }).then(function (status, success, response) {
-                console.log(response);
-            }, function (error) {
-                console.log(error);
-            });
-        }.bind(this));
+                onePost: {
+                    title: this.refs.title.value,
+                    body: this.refs.body.value
+                }
+            }, () => $.post({
+                    url: 'https://jsonplaceholder.typicode.com/posts',
+                    dataType: 'json',
+                    data: this.state.onePost
+                }).then((status, success, response) => console.log(response),
+                    (error) => console.log(error))
+        );
         this.refs.title.value = null;
         this.refs.body.value = null;
         event.preventDefault();
@@ -60,9 +52,7 @@ export default class PostsService extends Component {
         $.ajax({
             type: 'DELETE',
             url: 'https://jsonplaceholder.typicode.com/posts/' + id
-        }).then(function (status, success, response) {
-            console.log(response);
-        });
+        }).then((status, success, response) => console.log(response));
     }
 
     updatePost(event) {
@@ -71,24 +61,22 @@ export default class PostsService extends Component {
                 title: this.refs.titlemodal.value,
                 body: this.refs.bodymodal.value
             }, modalIsOpen: false,
-        }, function () {
-            $.ajax('https://jsonplaceholder.typicode.com/posts/' + this.state.id, {
+        }, ()=> $.ajax('https://jsonplaceholder.typicode.com/posts/' + this.state.id,
+            {
                 type: 'PATCH',
                 data: this.state.onePost
-            }).then(function (status, success, response) {
-                console.log(response);
-            });
-        });
+            }).then((status, success, response) => console.log(response))
+        );
         event.preventDefault();
     }
 
     openModal(id, title, body) {
         this.setState({
-            modalIsOpen: true, id: id, onePost: {
+            modalIsOpen: true, id: id,
+            onePost: {
                 title: title, body: body
             }
         });
-
     }
 
     closeModal() {
