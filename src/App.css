@@ -46,6 +46,11 @@ h1{text-align: center}
     text-align: center;
     text-decoration: none;
 }
+.nav-bar a{
+    text-decoration: none;
+    color:inherit;
+}
+
 
 
 .post-header{
@@ -100,7 +105,6 @@ h1{text-align: center}
 }
 .btn {
     display: flex;
-
     width: 120px;
     height: 60px;
     background-color: #A9A9A9;
@@ -152,4 +156,39 @@ h1{text-align: center}
     transform: translate(-50%, -50%);
     background: lavender;
     width: 700px;
+}
+
+.btn-main {
+    display: flex;
+    background: #5a88a6;
+    background-image: -webkit-linear-gradient(top, #5a88a6, #1d9ded);
+    background-image: -moz-linear-gradient(top, #5a88a6, #1d9ded);
+    background-image: -ms-linear-gradient(top, #5a88a6, #1d9ded);
+    background-image: -o-linear-gradient(top, #5a88a6, #1d9ded);
+    background-image: linear-gradient(to bottom, #5a88a6, #1d9ded);
+    border-radius: 28px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 18px;
+    padding: 7px 20px 10px 20px;
+    text-decoration: none;
+    outline: 0;
+}
+
+.btn-main:hover {
+    cursor: pointer;
+    background: #3cb0fd;
+    background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+    text-decoration: none;
+}
+
+.google-cont {
+
+}
+.google-cont button {
+    margin-bottom: 20px;
 }
