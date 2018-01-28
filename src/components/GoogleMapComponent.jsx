@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap} from "react-google-maps"
 import {MarkerWithLabel } from "react-google-maps/lib/components/addons/MarkerWithLabel";
+import Modal from 'react-modal';
 
-import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-const customMarkerStyle = {
-    backgroundColor: "red", fontSize: "16px", padding: "16px", borderRadius: "50%"
-};
 
 const GoogleMapComp = withScriptjs(withGoogleMap(props =>
 
@@ -15,27 +12,33 @@ const GoogleMapComp = withScriptjs(withGoogleMap(props =>
         defaultZoom={11}
         defaultCenter={{ lat: 49.9935, lng: 36.230382999 }}>
 
-
-        <MarkerWithLabel
+        {  props.userCoords &&
+         <MarkerWithLabel
             position={{ lat: props.userCoords.lat, lng: props.userCoords.lng }}
-            labelAnchor={{x: 30, y: 90}}
-            labelStyle={customMarkerStyle}
+            labelAnchor={{x: 65, y: 90}}
+             labelClass={'custom-marker-style'}
             draggable={true}
             onDragEnd={position => {props.moveCoords(position.latLng.lat(), position.latLng.lng());}}
         >
-
-            <div>You</div>
+            <div className="label-name">You are here</div>
         </MarkerWithLabel>
+        }
 
 
+        {props.friendsMarkers.map((item, index) => {
+            return (
+        props.userName !== item.userName ?
+            <MarkerWithLabel
+                key={index}
+                position={{lat: +item.lat, lng: +item.lng }}
+                labelAnchor={{x: 65, y: 90}}
+                labelClass={'custom-marker-style'}
+            >
 
-        {(+props.senderCoords.lat !== props.userCoords.lat) && (props.senderCoords.lng !== props.userCoords.lng) && <MarkerWithLabel
-            position={{lat: +props.senderCoords.lat, lng: +props.senderCoords.lng }}
-            labelAnchor={{x: 50, y: 90}}
-             labelStyle={customMarkerStyle}
-        >
-            <div>You Friend</div>
-        </MarkerWithLabel>}
+            <div>{item.userName}</div>
+            </MarkerWithLabel> : null
+            )}
+        )}
     </GoogleMap>
 
 ));
@@ -45,14 +48,15 @@ export default class GoogleMapComponent extends Component {
             super();
            this.state = {
                isMarkerShown: false,
-               // coords: {lat: 49.9935, lng: 36.230382999},
                coords: {lat: null, lng: null},
-               friendCoords: {},
+               friendCoords: [{userName: null, lat: null, lng: null}],
                theHash: null,
-               hashFromParams: null
+               hashFromParams: null,
+               modalIsOpen: false,
+               userName: ''
             };
 
-             // this.websocket = new WebSocket("ws://localhost:5000");
+             // this.websocket = new WebSocket("ws://localhost:1000");
              this.websocket = new WebSocket("wss://node-js-websocket.herokuapp.com");
         }
 
@@ -70,59 +74,59 @@ export default class GoogleMapComponent extends Component {
 
         };
 
+
     moveMarker = (lat, lng) => {
-        this.websocket.send(JSON.stringify({theHash: this.state.theHash, lat, lng: lng }));
+        this.websocket.send(JSON.stringify({userName: this.state.userName, lat, lng }));
         console.log('координаты ушли после перемещения маркера', lat, lng);
-        this.setState({coords: {lat: lat, lng: lng}})
+        this.setState({coords: {lat, lng}})
     };
 
-
-
+    setName = () => {
+        this.setState({userName: this.refs.userName.value, modalIsOpen: false});
+        this.getFriendCoords();
+        this.websocket.send(JSON.stringify({userName: this.refs.userName.value, lat: this.state.coords.lat, lng: this.state.coords.lng}));
+        this.setState({friendCoords: [...this.state.friendCoords,
+            {userName: this.refs.userName.value, lat: this.state.coords.lat, lng: this.state.coords.lng}]})
+    };
 
 
     getFriendCoords = () => {
-        if (this.props.match.params.hash) {
-            let hashFromParams = this.props.match.params.hash;
-            this.websocket.onmessage = evt => {
-                let parse = JSON.parse(evt.data);
-                for (let i = 0; i < parse.length; i++) {
-                    let parseArr = JSON.parse(parse[i]);
-                    if (parseArr.theHash === +hashFromParams){
-                        this.setState({friendCoords: {lat: +parseArr.lat, lng: +parseArr.lng}});
-                        this.websocket.send(JSON.stringify({ theHash: hashFromParams, lat: this.state.coords.lat, lng: this.state.coords.lng}));
-                        console.log('координыты из параметров ушли', this.state.friendCoords);
-                    }
-                }
-            }
-        }
-
         this.websocket.onmessage = evt => {
-            console.log('координаты пришли move marker');
-            console.log(this.state.theHash);
             let parse = JSON.parse(evt.data);
-            if (!parse.length && this.state.coords.lat !== +parse.lat) {
-                this.setState({friendCoords: {lat: +parse.lat, lng: +parse.lng}});
-                console.log('координаты пришли move marker', this.state.friendCoords);
+            let friendCoords = this.state.friendCoords;
+            let searchUser = friendCoords.map(item => item.userName).indexOf(parse.userName);
+            if (searchUser === -1){
+                friendCoords.push({userName: parse.userName, lat: parse.lat, lng: parse.lng});
+                this.setState({friendCoords: friendCoords});
+            } else if (searchUser > -1) {
+                friendCoords[searchUser].lat = +parse.lat;
+                friendCoords[searchUser].lng = +parse.lng;
+                this.setState({friendCoords: friendCoords});
             }
-        }
+            console.log(friendCoords);
+        };
+
     };
 
+    openModal = () => {
+        this.setState({modalIsOpen: true});
+    };
 
     componentWillMount() {
-        this.setState({theHash: Math.random()});
         this.getCords();
-
-        // this.websocket.onmessage = evt => {
-        //     let parse = JSON.parse(evt.data);
-        //     if (!parse.length && this.state.theHash === +parse.theHash) {
-        //         this.setState({friendCoords: {lat: +parse.lat, lng: +parse.lng}});
-        //         console.log('координаты пришли send back', this.state.friendCoords);
-        //     }
-        // }
+        this.setState({theHash: Math.random()});
+        this.setState({modalIsOpen: true});
     }
 
     componentDidMount() {
-        this.getFriendCoords();
+        this.websocket.onmessage = evt => {
+        let friendCoords =[];
+          let parse = JSON.parse(evt.data);
+           for (let i = 0; i < parse.length; i++) {
+             friendCoords.push(parse[i]);
+           }
+            this.setState({friendCoords: friendCoords});
+        };
 
     }
 
@@ -130,12 +134,24 @@ export default class GoogleMapComponent extends Component {
     render() {
         return (
             <div className="google-cont">
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    contentLabel="Example Modal"
+                    className="modal-window">
+                    <form className="post-form">
+                        <label >Enter Name</label>
+                        <input className="in" type="text" ref="userName"/>
+                        <button className="btn" onClick={this.setName}>Save</button>
+                    </form>
+                </Modal>
 
-                <CopyToClipboard onCopy={this.onCopy} text={`artpoddybnyy.github.io/react-starter/#${this.props.match.url}/${this.state.theHash}`}>
-                    <button className="btn-main" onClick={this.formHash}>Copy to clipboard you coords</button>
-                </CopyToClipboard>
+                {/*<button className="btn-main" onClick={this.openModal}>Set name</button>*/}
 
-                {this.props.match.params.hash &&  <button className="btn-main" onClick={this.formHash}>Send your coords back</button>}
+                {/*<CopyToClipboard onCopy={this.onCopy} text={`artpoddybnyy.github.io/react-starter/#${this.props.match.url}/${this.state.theHash}`}>*/}
+                    {/*<button className="btn-main" onClick={this.formHash}>Copy to clipboard you coords</button>*/}
+                {/*</CopyToClipboard>*/}
+
+                {/*{this.props.match.params.hash &&  <button className="btn-main" onClick={this.formHash}>Send your coords back</button>}*/}
 
                 <GoogleMapComp
                     googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAA_SNg2m0lVDs7_-CVt6n2fJLr6_xcpA&v=3.exp&libraries=geometry,drawing,places"
@@ -143,9 +159,10 @@ export default class GoogleMapComponent extends Component {
                     containerElement={<div style={{ height: `800px` }} />}
                     mapElement={<div style={{ height: `100%` }} />}
                     userCoords={{lat: this.state.coords.lat, lng:  this.state.coords.lng}}
-                    senderCoords={{lat: this.state.friendCoords.lat, lng: this.state.friendCoords.lng}}
                     options={{draggable:true}}
                     moveCoords={this.moveMarker}
+                    friendsMarkers={this.state.friendCoords}
+                    userName={this.state.userName}
                 />
             </div>
         );

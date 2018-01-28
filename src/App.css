@@ -22,12 +22,14 @@
 }
 
 body {
-    /*background-image: url("react.png");*/
     background-color: #39f6ff;
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+*:focus {
+    outline: none;
 }
 
 h1{text-align: center}
@@ -91,22 +93,18 @@ h1{text-align: center}
     vertical-align: top;
     height: 40px;
 }
-/* ��� ��� ���� ���������, ����� ������ ������, ������� �� ������������
-��������� � ������. ����������, ��� label ����������. */
 .checkbox + label {
     cursor: pointer;
 }
 .checkbox:checked + label:before {
     background: #9FD468;
 }
-/* �������� ������������� ��������, ����� �� �������. */
+
 .checkbox:checked + label:after {
     left: 26px;
 }
 .btn {
     display: flex;
-    width: 120px;
-    height: 60px;
     background-color: #A9A9A9;
     color: black;
     padding: 14px 20px;
@@ -116,6 +114,8 @@ h1{text-align: center}
     cursor: pointer;
     opacity: 0.8;
     font-size: larger;
+    align-self: center;
+    text-align: center;
 }
 
 .btn:hover {
@@ -133,6 +133,9 @@ h1{text-align: center}
     border-radius: 10px;
     border: 6px solid #305A72;
     opacity: 0.9;
+}
+.post-form label{
+    text-align: center;
 }
 
 .in{
@@ -154,7 +157,6 @@ h1{text-align: center}
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: lavender;
     width: 700px;
 }
 
@@ -191,4 +193,36 @@ h1{text-align: center}
 }
 .google-cont button {
     margin-bottom: 20px;
+}
+
+.label-name {
+    margin: 0 auto;
+}
+
+.custom-marker-style {
+    display: flex;
+    justify-content: center;
+    background-color: red;
+    font-size: 16px;
+    padding: 15px;
+    border-radius: 50%;
+    width: 100px;
+    height: 20px;
+    text-align: center
+}
+@media screen and (max-width: 730px) {
+.post-form{
+    width: 400px;
+}
+}
+
+
+
+@media screen and (max-width: 480px) {
+    .post-form{
+        width: 200px;
+    }
+    .btn {
+        width: 80px;
+    }
 }
